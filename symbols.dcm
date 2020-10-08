@@ -1,0 +1,8 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP TC4426ACPA
+D 1.5A Dual High-Speed Power MOSFET Driver
+F https://www.distrelec.sk/Web/Downloads/_t/ds/TC4426A_24A_28Ax_eng_tds.pdf
+$ENDCMP
+#
+#End Doc Library
