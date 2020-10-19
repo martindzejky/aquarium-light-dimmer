@@ -474,8 +474,6 @@ Text GLabel 2150 1350 0    50   Input ~ 0
 SCL
 Text GLabel 2150 1450 0    50   Input ~ 0
 SDA
-Text GLabel 3150 1650 2    50   Input ~ 0
-INT
 Text GLabel 3900 1650 3    50   Input ~ 0
 INT
 $Comp
@@ -514,8 +512,6 @@ Text GLabel 4100 5850 2    50   Input ~ 0
 SCL
 Text GLabel 4100 5750 2    50   Input ~ 0
 SDA
-Text GLabel 3100 4950 0    50   Input ~ 0
-INT
 Text GLabel 4100 5550 2    50   Input ~ 0
 IN_GRAD
 Text GLabel 3100 5050 0    50   Input ~ 0
@@ -575,7 +571,53 @@ NoConn ~ 3100 5550
 NoConn ~ 3100 5450
 NoConn ~ 3100 5350
 NoConn ~ 3100 5250
-NoConn ~ 3100 5150
 NoConn ~ 3100 4850
 NoConn ~ 3100 4750
+Text GLabel 3100 5150 0    50   Input ~ 0
+LED_ERROR
+Text GLabel 3100 4950 0    50   Input ~ 0
+INT
+Text GLabel 3150 1650 2    50   Input ~ 0
+INT
+$Comp
+L Device:R R?
+U 1 1 5F8DB3E4
+P 5500 3750
+F 0 "R?" H 5600 3850 50  0000 L CNN
+F 1 "1k" H 5600 3650 50  0000 L CNN
+F 2 "" V 5430 3750 50  0001 C CNN
+F 3 "~" H 5500 3750 50  0001 C CNN
+	1    5500 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D?
+U 1 1 5F8DC9F3
+P 5500 4150
+F 0 "D?" V 5600 4050 50  0000 R CNN
+F 1 "RED" V 5350 4050 50  0000 R CNN
+F 2 "" H 5500 4150 50  0001 C CNN
+F 3 "~" H 5500 4150 50  0001 C CNN
+	1    5500 4150
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5500 4000 5500 3900
+$Comp
+L power:GND #PWR?
+U 1 1 5F8DDDCC
+P 5500 4400
+F 0 "#PWR?" H 5500 4150 50  0001 C CNN
+F 1 "GND" H 5500 4250 50  0000 C CNN
+F 2 "" H 5500 4400 50  0001 C CNN
+F 3 "" H 5500 4400 50  0001 C CNN
+	1    5500 4400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5500 4400 5500 4300
+Text GLabel 5500 3550 1    50   Input ~ 0
+LED_ERROR
+Wire Wire Line
+	5500 3550 5500 3600
 $EndSCHEMATC
