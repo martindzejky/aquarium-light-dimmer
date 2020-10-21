@@ -6,7 +6,7 @@ encoding utf-8
 Sheet 1 1
 Title "Aquarium clock-driven LED dimmer"
 Date "2020-10-07"
-Rev "v1.0"
+Rev "v1.1"
 Comp "Martin Jakubik"
 Comment1 ""
 Comment2 ""
@@ -474,34 +474,6 @@ Text GLabel 2150 1350 0    50   Input ~ 0
 SCL
 Text GLabel 2150 1450 0    50   Input ~ 0
 SDA
-Text GLabel 3900 1650 3    50   Input ~ 0
-INT
-$Comp
-L Device:R R2
-U 1 1 5F826462
-P 3900 1450
-F 0 "R2" H 4000 1550 50  0000 L CNN
-F 1 "100k" H 4000 1350 50  0000 L CNN
-F 2 "" V 3830 1450 50  0001 C CNN
-F 3 "~" H 3900 1450 50  0001 C CNN
-	1    3900 1450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3900 1600 3900 1650
-$Comp
-L power:+5V #PWR05
-U 1 1 5F826E2F
-P 3900 1250
-F 0 "#PWR05" H 3900 1100 50  0001 C CNN
-F 1 "+5V" H 3900 1400 50  0000 C CNN
-F 2 "" H 3900 1250 50  0001 C CNN
-F 3 "" H 3900 1250 50  0001 C CNN
-	1    3900 1250
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3900 1250 3900 1300
 Wire Notes Line
 	470  2700 11220 2700
 Text Notes 550  650  0    79   Italic 0
@@ -620,4 +592,6 @@ Text GLabel 5500 3550 1    50   Input ~ 0
 LED_ERROR
 Wire Wire Line
 	5500 3550 5500 3600
+Text Notes 2900 4900 2    50   ~ 0
+Use INPUT_PULLUP in Arduino for D2
 $EndSCHEMATC
