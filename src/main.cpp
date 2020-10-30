@@ -20,9 +20,34 @@
 
 // SETUP
 
-void setup() {}
+void setup() {
+    setupPins();
+}
 
 // LOOP
 
 void loop() {}
+
+// FUNCTIONS
+
+// set up pin modes and reset their state
+void setupPins() {
+    pinMode(PIN_ALARM_INT, INPUT);
+    pinMode(PIN_RESET_BTN, INPUT);
+    pinMode(PIN_ERROR_LED, OUTPUT);
+    pinMode(PIN_MOSFET,    OUTPUT);
+
+    digitalWrite(PIN_ERROR_LED, LOW);
+    digitalWrite(PIN_MOSFET,    LOW);
+}
+
+// enable the error LED and abort the program
+void error() {
+    digitalWrite(PIN_ERROR_LED, HIGH);
+    abort();
+}
+
+// reset arduino from software
+// https://arduinogetstarted.com/faq/how-to-reset-arduino-by-programming
+void(* reboot) (void) = 0;
 
