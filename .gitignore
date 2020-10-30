@@ -1,7 +1,4 @@
-# For PCBs designed using KiCad: http://www.kicad-pcb.org/
-# Format documentation: http://kicad-pcb.org/help/file-formats/
-
-# Temporary files
+# temporary files
 *.000
 *.bak
 *.bck
@@ -14,13 +11,21 @@ _autosave-*
 *-save.kicad_pcb
 fp-info-cache
 
-# Netlist files (exported from Eeschema)
+# netlist files (exported from Eeschema)
 *.net
 
-# Autorouter files (exported from Pcbnew)
+# autorouter files (exported from Pcbnew)
 *.dsn
 *.ses
 
-# Exported BOM files
+# exported BOM files
 *.xml
 *.csv
+
+# compilation targets
+cmake/
+sketch/
+
+# helper for vim autocomplete
+compile_commands.json
+
