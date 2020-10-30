@@ -4,9 +4,10 @@
 // TIME INTERVAL SETTINGS
 
 // TODO: these are the test numbers, update once in production
-#define MIN_TRANSITION_S 2
-#define MAX_TRANSITION_S 10
-#define DAY_LENGTH_S 60 * 60 * 24
+#define MIN_TRANSITION_S 1
+#define MAX_TRANSITION_S 2
+#define DAY_LENGTH_S 7
+#define FULL_LIGHT_LENGTH_S 2
 
 // PINS
 
@@ -14,8 +15,6 @@
 #define PIN_RESET_BTN 3
 #define PIN_ERROR_LED 4
 #define PIN_MOSFET 11
-#define PIN_SDA A4
-#define PIN_SCL A5
 #define PIN_GRAD_POT A2
 
 // TIME
@@ -70,6 +69,30 @@ void setupRtc() {
     rtc.disable32K();
 }
 
+// returns the length of the transition from no light
+// to full light (in seconds), taking into account
+// the position of the potentiometer
+long getTransitionLength() {
+    auto potentiometer = analogRead(PIN_GRAD_POT); // 0-1024
+    auto transition = map(potentiometer, 0, 1024, MIN_TRANSITION_S, MAX_TRANSITION_S);
+    return transition;
+}
+
+// computes the current time in the schedule and
+// make sure that the schedule is repeated
+long getTimeInSchedule() {
+    auto timeSinceScheduleStart = rtc.now() - scheduleStart;
+    auto timeSinceScheduleStartSeconds = timeSinceScheduleStart.totalseconds();
+
+    auto timeInSchedule = timeSinceScheduleStartSeconds % DAY_LENGTH_S;
+    return timeInSchedule;
+}
+
+void setLightPercentage(float percent) {
+    auto writeValue = int(percent * 1024.f);
+    analogWrite(PIN_MOSFET, constrain(writeValue, 0, 1024));
+}
+
 // SETUP
 
 void setup() {
@@ -83,7 +106,30 @@ void setup() {
 // LOOP
 
 void loop() {
-    delay(3000);
-    error();
+    auto transitionLength = getTransitionLength();
+    auto timeInSchedule = getTimeInSchedule();
+
+    // safety check to ensure I did not mess the numbers
+    if (transitionLength * 2 + FULL_LIGHT_LENGTH_S >= DAY_LENGTH_S) {
+        error();
+    }
+
+    if (timeInSchedule < transitionLength) {
+        // we are transitioning from no light to full light
+        setLightPercentage(float(timeInSchedule) / transitionLength);
+    } else if (timeInSchedule < transitionLength + FULL_LIGHT_LENGTH_S) {
+        // we are in full light
+        setLightPercentage(1.f);
+    } else if (timeInSchedule < transitionLength * 2 + FULL_LIGHT_LENGTH_S) {
+        // we are transitioning from full light to no light
+        auto timeInTransition = timeInSchedule - FULL_LIGHT_LENGTH_S - transitionLength;
+        setLightPercentage(float(transitionLength - timeInTransition) / transitionLength);
+    } else {
+        // we are in no light
+        setLightPercentage(0.f);
+    }
+
+    // TODO
+    delay(100);
 }
 
