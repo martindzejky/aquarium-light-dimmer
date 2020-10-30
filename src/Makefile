@@ -9,7 +9,7 @@ sketch:
 	ln -f main.cpp sketch/sketch.ino
 
 compile_commands.json: cmake
-	ln -sf build/cmake/compile_commands.json .
+	ln -sf cmake/compile_commands.json .
 
 cmake:
 	cmake -B cmake .

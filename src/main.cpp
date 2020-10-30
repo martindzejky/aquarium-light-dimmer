@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <RTClib.h>
 
 // TIME INTERVAL SETTINGS
 
@@ -17,16 +18,22 @@
 #define PIN_SCL A5
 #define PIN_GRAD_POT A2
 
+// TIME
 
-// SETUP
+RTC_DS3231 rtc;
+DateTime scheduleStart;
 
-void setup() {
-    setupPins();
+// HELPERS
+
+// enable the error LED and abort the program
+void error() {
+    digitalWrite(PIN_ERROR_LED, HIGH);
+    abort();
 }
 
-// LOOP
-
-void loop() {}
+// reset arduino from software
+// https://arduinogetstarted.com/faq/how-to-reset-arduino-by-programming
+void(* reboot) (void) = 0;
 
 // FUNCTIONS
 
@@ -41,13 +48,42 @@ void setupPins() {
     digitalWrite(PIN_MOSFET,    LOW);
 }
 
-// enable the error LED and abort the program
-void error() {
-    digitalWrite(PIN_ERROR_LED, HIGH);
-    abort();
+void setupRtc() {
+    // initialize DS3231
+    if (!rtc.begin()) {
+        error();
+    }
+
+    // If it does not have any time, just use the one
+    // from this source code. It does not really have to match
+    // the real clock, it's used relatively.
+    if (rtc.lostPower()) {
+        rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    }
+
+    // disable both alarms
+    rtc.disableAlarm(1);
+    rtc.disableAlarm(2);
+
+    // disable oscillating signals
+    rtc.writeSqwPinMode(DS3231_OFF);
+    rtc.disable32K();
 }
 
-// reset arduino from software
-// https://arduinogetstarted.com/faq/how-to-reset-arduino-by-programming
-void(* reboot) (void) = 0;
+// SETUP
+
+void setup() {
+    setupPins();
+    setupRtc();
+
+    // save the starting time of the schedule
+    scheduleStart = rtc.now();
+}
+
+// LOOP
+
+void loop() {
+    delay(3000);
+    error();
+}
 
