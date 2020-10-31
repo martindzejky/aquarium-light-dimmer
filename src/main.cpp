@@ -4,10 +4,10 @@
 // TIME INTERVAL SETTINGS
 
 // TODO: these are the test numbers, update once in production
-#define MIN_TRANSITION_S 1
-#define MAX_TRANSITION_S 2
-#define DAY_LENGTH_S 7
-#define FULL_LIGHT_LENGTH_S 2
+#define MIN_TRANSITION_S 10
+#define MAX_TRANSITION_S 20
+#define DAY_LENGTH_S 60
+#define FULL_LIGHT_LENGTH_S 10
 
 // PINS
 
@@ -100,29 +100,29 @@ void setup() {
 
     // save the starting time of the schedule
     scheduleStart = rtc.now();
+
+    // safety check to ensure I did not mess the numbers
+    if (MAX_TRANSITION_S * 2 + FULL_LIGHT_LENGTH_S >= DAY_LENGTH_S) {
+        error();
+    }
 }
 
 // LOOP
 
 void loop() {
-    auto transitionLength = getTransitionLength();
-    auto timeInSchedule = getTimeInSchedule();
-
-    // safety check to ensure I did not mess the numbers
-    if (transitionLength * 2 + FULL_LIGHT_LENGTH_S >= DAY_LENGTH_S) {
-        error();
-    }
+    auto transitionLength = (float) getTransitionLength();
+    auto timeInSchedule = (float) getTimeInSchedule();
 
     if (timeInSchedule < transitionLength) {
         // we are transitioning from no light to full light
-        setLightPercentage(float(timeInSchedule) / transitionLength);
-    } else if (timeInSchedule < transitionLength + FULL_LIGHT_LENGTH_S) {
+        setLightPercentage(timeInSchedule / transitionLength);
+    } else if (timeInSchedule < MAX_TRANSITION_S + FULL_LIGHT_LENGTH_S) {
         // we are in full light
         setLightPercentage(1.f);
-    } else if (timeInSchedule < transitionLength * 2 + FULL_LIGHT_LENGTH_S) {
+    } else if (timeInSchedule < transitionLength + MAX_TRANSITION_S + FULL_LIGHT_LENGTH_S) {
         // we are transitioning from full light to no light
-        auto timeInTransition = timeInSchedule - FULL_LIGHT_LENGTH_S - transitionLength;
-        setLightPercentage(float(transitionLength - timeInTransition) / transitionLength);
+        auto timeInTransition = timeInSchedule - FULL_LIGHT_LENGTH_S - MAX_TRANSITION_S;
+        setLightPercentage((transitionLength - timeInTransition) / transitionLength);
     } else {
         // we are in no light
         setLightPercentage(0.f);
