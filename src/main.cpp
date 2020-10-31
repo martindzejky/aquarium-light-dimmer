@@ -53,20 +53,19 @@ void setupRtc() {
         error();
     }
 
-    // If it does not have any time, just use the one
-    // from this source code. It does not really have to match
+    // It does not really have to match
     // the real clock, it's used relatively.
-    if (rtc.lostPower()) {
-        rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    }
-
-    // disable both alarms
-    rtc.disableAlarm(1);
-    rtc.disableAlarm(2);
+    rtc.adjust(DateTime(2020, 10, 31));
 
     // disable oscillating signals
     rtc.writeSqwPinMode(DS3231_OFF);
     rtc.disable32K();
+
+    // disable both alarms
+    rtc.clearAlarm(1);
+    rtc.clearAlarm(2);
+    rtc.disableAlarm(1);
+    rtc.disableAlarm(2);
 }
 
 // returns the length of the transition from no light
