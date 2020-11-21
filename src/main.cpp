@@ -88,8 +88,8 @@ long getTimeInSchedule() {
 }
 
 void setLightPercentage(float percent) {
-    auto writeValue = int(percent * 256.f);
-    analogWrite(PIN_MOSFET, constrain(writeValue, 0, 256));
+    auto writeValue = int(percent * 255.f);
+    analogWrite(PIN_MOSFET, constrain(writeValue, 0, 255));
 }
 
 // SETUP
